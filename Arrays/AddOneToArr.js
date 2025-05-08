@@ -1,7 +1,7 @@
 // Given a non-negative number represented as an array of digits, add 1 to the number ( increment the number represented by the digits ).
 // The digits are stored such that the most significant digit is the first element of the array.
 // Example => [1,2,3] will become [1,2,4] and [9,9,9] will become [1,0,0,0]
-const arr = [9, 9, 9];
+const arr = [6,5,9];
 console.log(AddToarr(arr).join(" "));
 
 // iterating from last index if equals 9 then go inside while loop and make it 0 until index 1 and make it +1. if arr[i] seems 9

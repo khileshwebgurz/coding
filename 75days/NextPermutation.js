@@ -6,6 +6,15 @@
 // where we need to stop and again traverse from last element and check any element greater than element at point and swap them. After swapping
 // the arr[i] take arr[i+1] till n-1 and reverse them and that will be the answer.
 
+
+// .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)) this sorting technique is useful for sorting the string, and something that cannot be subtracted like number, 
+
+// If a < b, return -1 → means a comes before b
+// If a > b, return 1 → means a comes after b
+// If equal, return 0 → keep their order
+
+// .sort((a,b)=> a-b) is useful for numbers.
+
 // Time complexity was O(2n) and space complexity was O(1)
 const arr = [2, 4, 1, 7, 5, 0];
 console.log(nextPermut(arr).join(" "));
@@ -17,7 +26,7 @@ function nextPermut(arr) {
 
   let ind = -1;
 
-//   using this loop we find the break point i.e 1 for the given array in this case.
+//   using this loop we find the break point i.e 1 for the given array in this case. as 1 is smaller than 7.
   for (let i = n - 2; i >= 0; i--) {
     if (arr[i] < arr[i + 1]) {
       ind = i;
@@ -25,7 +34,7 @@ function nextPermut(arr) {
     }
   }
 
-//   this means we didn't find any break point or the array is in descending order, so there will be no next permutate.
+//   this means we didn't find any break point or the array is in descending order, so there will be no next permutate. So we restart it as a circle.
   if (ind == -1) {
     arr.reverse();
     return arr;
@@ -33,6 +42,7 @@ function nextPermut(arr) {
 
   for (let i = n - 1; i > ind; i--) {
     if (arr[i] > arr[ind]) {
+      // swapping 
       [arr[i], arr[ind]] = [arr[ind], arr[i]];
       break;
     }

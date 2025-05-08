@@ -20,6 +20,7 @@ console.log(buySellItemBruteForceMultiple(arr));
 // If price[i] < price[i-1], ignore it (since selling at a lower price results in a loss).
 
 // for this Tc will be O(n) and Sc will be O(1)
+
 function buySellItem(arr) {
   let profit = 0;
   let n = arr.length;

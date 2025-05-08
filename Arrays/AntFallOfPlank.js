@@ -7,9 +7,9 @@
 // So 0th position ant will take 4s , 1st position will 3 sec and 3rd position will take 1s . So we have to find the longest time
 // i.e 4
 
-const n = 3;
-const left = [0];
-const right = [ 3];
+const n = 4;
+const left = [];
+const right = [0, 1, 3];
 
 console.log(lastAnt(n, left, right));
 
@@ -25,6 +25,7 @@ function lastAnt(n, left, right) {
   for (let j = 0; j < right.length; j++) {
     maxRight = Math.max(maxRight, n - right[j]);
   }
+
   ans = Math.max(maxLeft, maxRight);
   return ans;
 }

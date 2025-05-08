@@ -7,7 +7,7 @@ class Node{
         this.next = null;
     }
 }
-
+// 1 2 4 4 5 6 7 8
 // creating a sample linkedlist
 const head = new Node(1);
 head.next = new Node(2);
