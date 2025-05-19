@@ -17,7 +17,7 @@ const slots2 = [
   [60, 70],
 ];
 const d = 12;
-console.log(optimisedmettingScheduler(slots1, slots2, d));
+console.log(meetingScheduler(slots1, slots2, d));
 
 // this is the brute force approach for finding the common interval for both the people to get the time slot.
 // using this the time complexity will be O(n2) and Space complexity will be O(1).
@@ -43,28 +43,27 @@ function meetingScheduler(slots1, slots2, d) {
       }
     }
   }
-  return [];
+  return [-1];
 }
 
 //now the optimised approach is using sorting both the slots and using two pointers on both the slots which is start and end
 // this technique is the optimised with time complexity of O(n log n + m log m) and O(1) space complexity
 
-function optimisedmettingScheduler(slots1,slots2,d){
-    let i =0;
-    let j =0;
-    slots1.sort((a,b)=> a[0]-b[0])
-    slots2.sort((a,b)=> a[0]-b[0])
-    while(i < slots1.length && j < slots2.length){
-        let start = Math.max(slots1[i][0],slots2[j][0])
-        let end = Math.min(slots1[i][1],slots2[j][1])
+function optimisedmettingScheduler(slots1, slots2, d) {
+  let i = 0;
+  let j = 0;
+  slots1.sort((a, b) => a[0] - b[0]);
+  slots2.sort((a, b) => a[0] - b[0]);
+  while (i < slots1.length && j < slots2.length) {
+    let start = Math.max(slots1[i][0], slots2[j][0]);
+    let end = Math.min(slots1[i][1], slots2[j][1]);
 
-        if(end - start > d){
-            return [start, start+d]
-        }
-
-        if(i<slots1.length) i++;
-        if(j< slots2.length) j++;
-
+    if (end - start > d) {
+      return [start, start + d];
     }
-    return []
+
+    if (i < slots1.length) i++;
+    if (j < slots2.length) j++;
+  }
+  return [];
 }
