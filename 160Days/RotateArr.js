@@ -9,7 +9,7 @@ console.log(newarr.join(" "));
 
 
 
-// Method 1 : Tc is O(N) and Sc is O(1)
+// Method 1 : Using in built methods , Tc is O(N) and Sc is O(1)
 function rotating(arr, d) {
   d = d% arr.length;
 //   here slice(d) will start from d=2 means 3,4,5,6 then we concat 1,2 at the end of 3,4,5,6.

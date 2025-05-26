@@ -1,0 +1,95 @@
+Types of Annotations:
+1) Parameter Binding Annotations -> These annotations help you extract values from the HTTP request and pass them as parameters to your controller methods.
+🔹 @PathVariable
+Purpose: Bind a part of the URI (URL path) to a method parameter.
+
+Example: @GetMapping("/users/{id}")
+public String getUserById(@PathVariable String id) {
+return "User ID is " + id;
+}
+
+Explanation: If a user sends a GET request to /users/123, Then id will be "123".
+
+🔹 @RequestParam
+
+Purpose: Extract values from the query string (i.e., after ? in the URL).
+
+Example:
+
+@GetMapping("/search")
+public String search(@RequestParam String keyword) {
+return "You searched for: " + keyword;
+}
+
+Usage:
+
+Request URL: /search?keyword=spring
+
+keyword = "spring"
+
+Also supports default values and optional params:
+
+@GetMapping("/search")
+public String search(@RequestParam(defaultValue = "all") String keyword) {
+return "Searching for: " + keyword;
+}
+
+🔹 @RequestBody
+
+Purpose: Bind the JSON body of a POST/PUT request to a Java object.
+
+Example:
+
+@PostMapping("/users")
+public String createUser(@RequestBody User user) {
+return "Created user: " + user.getName();
+}
+
+Use case: Frontend sends JSON:
+{
+"name": "John",
+"email": "john@example.com"
+}
+
+Then Spring will map it automatically to your Java class User.
+
+🔹 @RequestHeader
+
+Purpose: Access HTTP headers like Authorization, Content-Type, etc.
+
+Example:
+
+@GetMapping("/headers")
+public String showHeaders(@RequestHeader("User-Agent") String userAgent) {
+return "User-Agent is: " + userAgent;
+}
+
+🔹 @ModelAttribute (less common in REST, more for forms)
+
+Purpose: Binds form data or query parameters to a model object (mostly used with @Controller).
+
+Example:
+
+@PostMapping("/register")
+public String registerUser(@ModelAttribute User user) {
+// Automatically sets values from form input to the User object
+return "User registered";
+}
+
+2) Dependency Injection Annotations -> These are used to tell Spring Boot to “inject” or wire the required classes (dependencies) automatically, 
+instead of creating them manually.
+
+Spring Boot consists of the following four layers:
+
+Presentation Layer: Handles HTTP requests, authentication, and JSON conversion.
+Business Layer: Contains business logic, validation, and authorization.
+Persistence Layer: Manages database interactions using ORM frameworks like Spring Data JPA.
+Database Layer: Stores application data using relational (MySQL, PostgreSQL) and NoSQL databases (MongoDB, DynamoDB).
+
+Flow of Logic:
+The client (frontend or API consumer) sends an HTTP request (GET, POST, PUT, DELETE) to the application.
+The request is handled by the Controller Layer, which maps the request to a specific handler method.
+The Service Layer processes business logic and communicates with the Persistence Layer to fetch or modify data.
+The Persistence Layer interacts with the Database Layer using Spring Data JPA or R2DBC, often through a Repository Class that extends CRUD services.
+The processed response is returned as JSON.
+Spring Boot Actuator can be used for monitoring and health checks.

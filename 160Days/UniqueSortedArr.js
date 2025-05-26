@@ -1,8 +1,8 @@
 // arr = [1,3,3,1,2,4,4,4,2,7,7,6] . this is an array , you need to return an array which store only unique items and in sorted order.
 //  don't use any in built method/function in js
 
-const arr = [1, 3, 3, 1, 2, 3,4, 4, 4, 2, 7, 7, 6];
-console.log(uniqueArr(arr));
+const arr = [1, 3, 3, 1, 2, 3, 4, 4, 4, 2, 7, 7, 6];
+console.log(bruteForce(arr));
 
 // the brute force approach
 
@@ -34,4 +34,16 @@ function uniqueArr(arr) {
     }
   }
   return uniqueArr;
+}
+
+
+// using inbuilt methods, we can't directly apply .sort() in Set() bcz set is an object in js not an array and .sort() methods work on
+// array. so we first convert set to an array using spread operator then sort it.
+function bruteForce(arr) {
+  let newarr = new Set();
+  for (let i = 0; i < arr.length; i++) {
+    newarr.add(arr[i]);
+  }
+  let myarray = [...newarr];
+  return myarray.sort();
 }

@@ -1,6 +1,7 @@
 // Given an array move all the zeroes from the array to the end of the array
 
-let arr = [1, 0, 0, 3, 4, 0, 7, 9, 0];
+// let arr = [1, 0, 0, 3, 4, 0, 7, 9, 0];
+let arr = [1,0,0,2,3,4,6,0,2,5,0]
 let newarr = moveZeroes(arr);
 // to print in a single row with some space
 console.log(newarr.join(" "));

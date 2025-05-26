@@ -11,7 +11,7 @@
 // Input = [-1,40,-14,7,6,5,-4,-1], output: 52
 // Explanation: [7,6,5,-4,-1,-1,40]
 
-const arr = [8, -8, 9, -9, 10, -11, 12];
+const arr = [-2,-89,-3,-7,-6,-5,-4,-9];
 console.log(maxCircularSum(arr));
 
 // Brute force approach , we need to iterate of array and consider creating a circular for each indexed element.
