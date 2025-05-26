@@ -11,7 +11,7 @@
 // Input = [-1,40,-14,7,6,5,-4,-1], output: 52
 // Explanation: [7,6,5,-4,-1,-1,40]
 
-const arr = [-2,-89,-3,-7,-6,-5,-4,-9];
+const arr = [-1,40,-14,7,6,5,-4,-1];
 console.log(maxCircularSum(arr));
 
 // Brute force approach , we need to iterate of array and consider creating a circular for each indexed element.
@@ -24,7 +24,7 @@ function maxCircularSum(arr) {
   for (let i = 0; i < n; i++) {
     let currMax = 0;
     for (let j = 1; j <= n; j++) {
-      let index = (i + j - 1) % n; // using modulus to track around
+      let index = (i + j - 1) % n; 
       currMax += arr[index];
       maxSum = Math.max(maxSum, currMax);
     }
