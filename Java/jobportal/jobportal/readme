@@ -1,0 +1,249 @@
+///////////////////// pom.xml //////////////////////////
+// JPA -> Java Persistence API
+<groupId>: org.springframework.boot -> Think of <groupId> as the "brand" or "company" name. For example, org.springframework.boot is like saying "Spring Boot"
+ is the organization producing this library.It groups related libraries together. For example, all Spring Boot-related dependencies (like spring-boot-starter-web,
+  spring-boot-devtools, etc.) share the same groupId (org.springframework.boot), indicating they belong to the same project.
+
+<artifactId>: spring-boot-devtools -> spring-boot-devtools refers to the specific "Developer Tools" module within the Spring Boot project. This module provides
+ features like automatic restarts and LiveReload for development.
+
+ <scope>runtime</scope>
+<optional>true</optional> -> The runtime scope ensures its only used when running the app, and optional prevents it from being inherited by other projects.
+
+<artifactId>spring-boot-starter-thymeleaf</artifactId> => The spring-boot-starter-thymeleaf is a Spring Boot Starter dependency that simplifies the integration of 
+Thymeleaf, a popular server-side Java template engine, into a Spring Boot application.Thymeleaf is a modern template engine used for rendering dynamic HTML pages in 
+web applications. Its often used in Spring Boot projects to generate server-side rendered (SSR) views, similar to JSP or FreeMarker, but with more flexibility
+ and natural template support.
+
+ <artifactId>spring-boot-starter-data-jpa</artifactId> => The spring-boot-starter-data-jpa is a Spring Boot Starter that provides everything needed to use Spring Data 
+ JPA, a powerful abstraction for working with relational databases in a Spring application. It simplifies database access by reducing boilerplate code and integrating 
+ seamlessly with Spring Boots auto-configuration.
+
+ Spring Data JPA: Part of the Spring Data family, it builds on the Java Persistence API (JPA) to provide a repository-based approach for database operations. It
+  allows you to define data access layers with minimal code, using interfaces and method naming conventions.
+  Starter Role: The spring-boot-starter-data-jpa bundles Spring Data JPA, a JPA provider (like Hibernate by default), and related dependencies, along with Spring Boots
+   auto-configuration, to enable database access in your application.
+
+<artifactId>spring-boot-starter-security</artifactId> => Spring Security: A highly customizable framework for handling authentication (who you are) and authorization 
+(what you can do) in Java applications. It secures endpoints,  methods, and data access while protecting against attacks like CSRF, XSS, and session fixation.
+
+<artifactId>postgresql</artifactId> => postgresql refers to the PostgreSQL JDBC Driver, which enables Java applications to connect to and interact with a PostgreSQL
+ database.The JDBC driver translates Java Database Connectivity (JDBC) API calls into PostgreSQL’s native protocol, allowing your Spring Boot application to perform 
+ database operations like queries, updates, and transactions.
+
+ org.postgresql =>  indicates that this is a library provided by the PostgreSQL community or its contributors.
+
+
+//////////////////////////////////// application.properties ////////////////////////////////////////////////////////////
+
+1) spring.datasource.url=jdbc:postgresql://localhost:5432/job_portal
+This property specifies the JDBC URL that Spring Boot uses to connect to your PostgreSQL database. It tells the applications DataSource (a component that manages
+ database connections) where to find the database and which database to use.
+Explanation: 
+a) jdbc: Indicates that the connection uses the Java Database Connectivity (JDBC) API, which is the standard Java interface for interacting with relational databases
+ like PostgreSQL.
+b) postgresql: Specifies the database type (PostgreSQL in this case).
+c) localhost:5432: The host (localhost) and port (5432, PostgreSQL default port) where the PostgreSQL server is running. If the database is hosted elsewhere
+ (e.g., on a cloud provider like AWS RDS), youd replace localhost:5432 with the appropriate host and port.
+d) job_portal: The name of the specific database within the PostgreSQL server that your application will connect to. This database must exist before the
+ application starts (e.g., created via CREATE DATABASE job_portal; in PostgreSQL).
+
+2) spring.jpa.hibernate.ddl-auto=update
+Explanation: 
+The line spring.jpa.hibernate.ddl-auto=update in your Spring Boot application.properties file is a configuration property that controls how Hibernate 
+(the default JPA provider in spring-boot-starter-data-jpa) manages the database schema for your application’s entities.This property tells Hibernate how to handle
+ the database schema (e.g., tables, columns, constraints) based on your JPA entities (classes annotated with @Entity) when the application starts. It determines 
+ whether Hibernate should create, update, or validate the schema.
+b) When set to update, Hibernate compares the database schema (e.g., tables in the job_portal database) with your JPA entities (e.g., User, Job) and automatically
+ updates the schema to match the entities
+
+3) spring.jpa.show-sql=true
+Explanation: When set to true, this property enables Hibernate to log all SQL statements (e.g., SELECT, INSERT, UPDATE, DELETE) generated during database operations
+ to the console or log output. This is primarily a debugging tool to help developers see the SQL executed by Hibernate when interacting with the database 
+ (in your case, the PostgreSQL job_portal database).
+
+4) spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+Explanation: This property tells Hibernate which dialect to use when generating SQL statements for your PostgreSQL database. A Hibernate dialect is a configuration
+ that ensures Hibernate produces SQL compatible with the specific databases syntax, features, and data types.
+ Dialect -> A dialect is a Hibernate class that defines how to interact with a particular database. It handles database-specific SQL generation, data type mappings,
+  and features (e.g., sequences, functions).
+-> org.hibernate.dialect.PostgreSQLDialect => specifies that your database is PostgreSQL, so Hibernate generates SQL tailored to PostgreSQL syntax and capabilities.
+
+5) spring.thymeleaf.cache=false
+Explanation: When set to false, this property disables caching of Thymeleaf templates (e.g., .html files in src/main/resources/templates/), meaning templates are 
+reloaded from disk on every request. This allows changes to templates to be reflected immediately without restarting the application.
+By default, Thymeleaf caches parsed templates in memory to improve performance. Once a template (e.g., jobs.html) is loaded and parsed, Thymeleaf reuses the cached 
+version for subsequent requests, avoiding the overhead of re-reading and re-parsing the file.
+
+
+//////////////////////////////////////////////////////model/User.java ///////////////////////////////////////////////////////////////////
+
+import jakarta.persistence.*; -> Imports JPA annotations (e.g., @Entity, @Id, @Table) for mapping the class to a database table.
+java.util.*: Imports Java collections (e.g., Set, HashSet) used for the roles field.
+
+@Entity Annotation-> marks the User class as a JPA entity, indicating it maps to a table in the database. Tells Hibernate (via spring-boot-starter-data-jpa) that
+ instances of User represent rows in a database table, with fields mapping to columns. With spring.jpa.hibernate.ddl-auto=update (from your application.properties),
+  Hibernate creates or updates the table based on this entitys structure.
+
+@Table(name = "users") -> specifies the database table name for the User entity. Maps the User class to a table named users in the job_portal PostgreSQL database. 
+Without this, Hibernate would default to a table named user (lowercase class name), but users is more conventional for a collection of user records.
+
+@Id: Marks id as the primary key column in the users table.
+@GeneratedValue(strategy = GenerationType.IDENTITY): Specifies that the id is auto-incremented by the database using an identity column (in PostgreSQL, a SERIAL
+ or BIGSERIAL type). Each new User gets a unique, automatically generated ID.
+
+
+@ElementCollection(fetch = FetchType.EAGER)
+private Set<String> roles = new HashSet<>();
+Explanation: 
+ @ElementCollection -> The @ElementCollection annotation tells Hibernate that the roles field is a collection of basic types (or embeddable objects) that should be stored in a separate 
+ table in the database, rather than as a column in the users table.
+ Hibernate looks at the fields declared type (Set<String> roles) to determine that roles is a collection of String values (a basic type, not an entity). This is why 
+ you are correct that Set<String> defines the collection as strings.
+ fetch = FetchType.EAGER: Loads roles immediately when a User is fetched.
+
+
+
+/////////////////////////////////////////////////////////// UserRepository ////////////////////////////////////////////////////////////////
+
+1)import com.example.jobportal.model.User;
+2) import org.springframework.data.jpa.repository.JpaRepository;
+3) import java.util.Optional; -> use Optional for safe null handling
+
+Explanation: -> 1) Imports the User entity class, which this repository manages. The User entity (with fields like id, username, password, roles) maps to the users 
+table in your PostgreSQL job_portal database.
+2) Imports the JpaRepository interface from Spring Data JPA, which provides built-in methods for CRUD operations and querying.
+3) Imports the Optional class, used as the return type for the custom query method to handle cases where a user might not be found.
+
+public interface UserRepository extends JpaRepository<User, Long> {}
+Explanation:
+JpaRepository is a Spring Data JPA interface that provides ready-to-use methods for common database operations (e.g., save, find, delete) without writing SQL
+ or boilerplate code.
+ User: The entity type this repository manages (your User class).
+ Long: The type of the entity’s primary key (id field in User, annotated with @Id).
+ By extending JpaRepository, UserRepository inherits methods like findAll(), findById(), save(), delete(), etc., for free, tailored to the User entity.
+ use Optional for safe null handling
+
+ -> Optional<User> findByUsername(String username); => A custom query method that finds a User by their username.
+ Spring Data JPA uses the method name (findByUsername) to automatically generate a query: SELECT * FROM users WHERE username = ?
+
+//////////////////////////////////////////////////////////// SecurityConfig.java ////////////
+
+1) import org.springframework.context.annotation.* -> Imports annotations like @Configuration and @Bean from the Spring Framework.
+2) import org.springframework.security.config.annotation.web.builders.HttpSecurity -> Imports HttpSecurity, which is used to configure security-related HTTP behavior (like login/logout access rules).
+3) import org.springframework.security.config.annotation.web.configuration.* -> Imports Spring Security configuration annotations, particularly @EnableWebSecurity
+4) import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; -> Imports BCryptPasswordEncoder, which is used to hash passwords securely.
+5) import org.springframework.security.crypto.password.PasswordEncoder; -> Interface used for encoding and verifying passwords.
+6) import org.springframework.security.web.*; -> Imports security web support components like SecurityFilterChain.
+
+@Configuration -> is an annotation in Spring that tells Spring Boot. Hey Spring, this class contains bean definitions — reusable objects and configurations — that you should create and manage for me.
+It is similar to dbConfig.js file in node js which contains the configuration/connection of mongodb wih node js and i my server.js i just require this file and use it
+or in some other file . It is reusable file.
+
+@EnableWebSecurity -> Apply security filters to all web requests in this application.” It activates the Spring Security framework, allowing you to configure how authentication and authorization work for your routes.
+It is similar like we do jwt token generation for route authentication in node.
+
+@Bean -> this annotation just define that this is a Bean .ek Spring ko batane ka tarika hai ki:
+Yeh method jo object return kar raha hai, is object ko tu Spring Container mein register kar le aur future mein kahin bhi zarurat pade toh yahin se de de.
+In Context of React js
+React mein tum ek component banaate ho useContext se ya Provider ke through — woh globally har jagah available hota hai.
+Waise hi, Spring mein @Bean se bana object globally Spring ke andar kahin bhi use ho sakta hai — bas DI (Dependency Injection) se inject kar lo.
+
+
+
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception  -> Declares a bean of type SecurityFilterChain. This is the recommended modern way to configure Spring Security (instead of extending WebSecurityConfigurerAdapter, which is now deprecated).
+HttpSecurity is the object that allows us to define all our security settings.
+
+http -> Begins the HTTP security configuration.
+.authorizeHttpRequests(auth -> auth) -> Starts defining authorization rules — i.e., who can access what URLs.
+// .requestMatchers("/register", "/login", "/css/**").permitAll() -> 
+These are public endpoints:
+/register: The registration page
+/login: The login page
+// -> /css/**: Static CSS files
+permitAll(): Anyone can access these URLs — no login required.
+
+ .anyRequest().authenticated()->
+All other URLs not explicitly listed above will require authentication (i.e., you must be logged in to access them).
+
+.formLogin(form -> form -> Starts configuring form-based login behavior.
+
+.loginPage("/login") -> Specifies a custom login page URL (your own /login HTML page). Without this, Spring would use a default login page.
+.defaultSuccessUrl("/dashboard", true) -> After successful login, the user is redirected to /dashboard. true: Always go to this URL after login, even if they tried to visit a different page before logging in.
+.permitAll() -> Allows everyone to access the login page, even if they're not logged in.
+
+.logout(logout -> logout) -> Begins logout configuration.
+.logoutSuccessUrl("/login?logout") -> on successful logout redirect to this page -> /login?logout
+
+return http.build(); -> Finalizes the HttpSecurity configuration and returns the built security filter chain to Spring.
+
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+
+=> This creates a PasswordEncoder bean using the BCrypt algorithm, which is widely used for hashing passwords.
+You will use this encoder when saving and validating user passwords in your authentication logic:
+e.g., encoder.encode(rawPassword)
+e.g., encoder.matches(rawPassword, hashedPassword)
+
+
+// ////////////////////////////////////// AuthController.java //////////////////
+
+1) import org.springframework.beans.factory.annotation.Autowired; => Automatically injects required beans.
+2) import org.springframework.security.crypto.password.PasswordEncoder; +>  Used to hash passwords securely
+3) import org.springframework.stereotype.Controller; =>  Marks this class as a Spring MVC controller.
+4) import org.springframework.ui.Model; =>  Used to send data to the HTML (Thymeleaf) views.
+5) import org.springframework.web.bind.annotation.*; => Annotations to map HTTP requests to methods.
+
+import java.util.Set; => Used to assign roles to the user (e.g., Set.of("ROLE_USER")).
+
+@Controller
+public class AuthController
+=> Tells Spring that this class contains web endpoints (typically returning view templates like register.html, login.html, etc.).
+
+@Autowired
+private UserRepository userRepository;
+=> Spring injects the UserRepository here so we can use it to save the user into the database.
+
+
+@Autowired
+private PasswordEncoder passwordEncoder;
+=> Injects the PasswordEncoder bean defined in your SecurityConfig — used to hash passwords before saving.
+
+@GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+}
+=> Model object here is to pass data to frontedn(Thymeleaf).Tumne new User() banaya, aur isko model mein add kiya.
+
+
+
+@PostMapping("/register")
+    public String registerSubmit(@ModelAttribute User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Set.of("ROLE_USER"));
+        userRepository.save(user);
+        return "redirect:/login";
+}
+
+@ModelAttribute User user
+Spring Boot automatically:
+HTML form ke input fields ko User class ke fields ke saath bind kar deta hai.
+Tumhe manually user.setName(...) likhne ki zarurat nahi.
+Example: Form mein agar <input name="email" /> hai, toh user.getEmail() mein wo value mil jaayegi.
+
+userRepository.save(user) -> userRepository is a Spring Data JPA interface (internally SQL query execute karta hai).
+
+
+///////////////////////// register.html ./////////////////////////////////////
+
+// <html xmlns:th="http://www.thymeleaf.org"> 
+-> This tells the browser: “This HTML file uses the Thymeleaf templating engine.”
+xmlns:th defines the th: namespace so that you can use Thymeleaf attributes like th:action, th:field, etc.
+
+// th:object="${user}" -> 
+Binds this form to the User object from the model.
+In your Spring controller, you're doing this:
+model.addAttribute("user", new User());
+This tells Thymeleaf: "Hey, the form fields below are bound to this user object."

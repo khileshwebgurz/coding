@@ -11,7 +11,7 @@
 // Input = [-1,40,-14,7,6,5,-4,-1], output: 52
 // Explanation: [7,6,5,-4,-1,-1,40]
 
-const arr = [-10, -3, -4, -7, 6, 5, -4, -1];
+const arr = [10, -3, -4, 7, 6, 5, -4, -1];
 console.log(maxCircularSum1(arr));
 
 // Brute force approach , we need to iterate of array and consider creating a circular for each indexed element.
@@ -32,38 +32,42 @@ console.log(maxCircularSum1(arr));
 //   return maxSum;
 // }
 
-// optimised way
+// optimised way, the logic is we find the maxsubarray sum , then we find the totalSUm
 function maxCircularSum1(arr) {
   const n = arr.length;
+  let currMaxSum = 0,
+    currMinSum = 0;
+  let maxSum = arr[0],
+    minSum = arr[0];
+    let totalSum =0;
 
-  let maxKadane = kadane(arr);
+  for (let i = 0; i < n; i++) {
+    // kadane's to find the maximum subarray sum
+    currMaxSum = Math.max(currMaxSum + arr[i], arr[i]);
+    maxSum = Math.max(maxSum, currMaxSum);
+    
 
-  // let calculate totalsum
-  let totalSum = 0;
-  for (let i = 0; i < arr.length; i++) {
+    // kadane's to find the minimum sum subarray
+    currMinSum = Math.min(currMinSum + arr[i], arr[i]);
+    minSum = Math.min(minSum, currMinSum);
+    
+
+    // sum of all elements of input array
     totalSum += arr[i];
-    arr[i] = -arr[i];
+    
   }
 
-  // use kadane on the inverted array to find min subarray sum
-  let maxInverted = kadane(arr);
+  let normalSum = maxSum;
+  let circularSum = totalSum - minSum;
+  
 
-  if (totalSum + maxInverted === 0) return maxKadane;
-
-  return Math.max(maxKadane, totalSum + maxInverted);
-}
-
-function kadane(arr) {
-  // let first find the maximum subarray sum
-  let currentMax = arr[0];
-  let maxGlobal = arr[0]; //stores max subarray sum non circular
-
-  for (let i = 1; i < arr.length; i++) {
-    currentMax = Math.max(arr[i], currentMax + arr[i]);
-
-    if (currentMax > maxGlobal) {
-      maxGlobal = currentMax;
-    }
+  if (minSum === totalSum) {
+    return normalSum;
   }
-  return maxGlobal;
+  return Math.max(normalSum, circularSum);
 }
+
+
+// This approach is similar to the previous one, but the key difference is that we're using Kadane's algorithm to find the circular
+// subarray sum as well. The maximum sum of a circular subarray can be defined as the total sum of the array minus the sum of a 
+// subarray in the middle. So, to maximize the circular subarray sum, we need to minimize the subarray sum. 
